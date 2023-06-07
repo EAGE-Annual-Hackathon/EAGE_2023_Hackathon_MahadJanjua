@@ -1,0 +1,1169 @@
+Relative File Path,Information
+level_1/level_2/1508.pdf," 
+ 
+84th EAGE Annual Conference & Exhibition  
+Validation of Models for Depletion in High Contrast Systems  
+Introduction  
+ 
+Upscaling of high -resolution geologic models is a useful  technique to improve computational flow 
+simulation efficiency , with the challenges of  retaining model heterogeneity and subsurface uncertainty.  
+This work extends the recently developed diffuse source upscaling techniques for high contrast systems, 
+(Liu et al.  2022, Nunna et al.  2019)  to pressure transient models of flow, and to determine the impact 
+of averaging sub -volume on the flow capacity (half -cell transmissibility).  Examples from selected 
+layers in the SPE 10 benchmark model are  presented to demonstrate the concepts.   
+ 
+Method ology: Transient Solutions  
+ 
+The diffusi vity equation , Eq.  (1), describes pressure transients  within a reservoir , or at the scale of an 
+upscaling region , with uniform and constant fluid viscosity and total compressibility .  
+ 
+() ()10,tpx c u u k x p
+t
++ = =− 
+
+  (1) 
+The asymptotic solution of the high frequency limit of the Fourier transform leads to the Eikonal 
+equation for the diffusive time of flight  (DTOF) , 
+()x
+  (Virieux et  al.  1994) .  
+ 
+()()()()t kcx x x x      =
+  (2) 
+The DTOF will characterize the transient solutions of the diffusivity equation.   
+We utilize finite volume discretizations for each of these equations.  The diffusivity equation is 
+formulated using a fully implicit, single time step discretization with a uniform initial reference 
+pressure , 
+0initp= .  In depletion, one boundary of the upscaling region will be a pressure isobar, 
+f pp=
+, with no -flow on the remaining boundaries.   
+ 
+()
+()10i init
+pi t ij i j
+jippc
+tV T p p
+−+
+ − =  (3) 
+Here, 
+piV  is the pore volume of cell 
+i  and 
+ijT  is the intercell transmissibility between cell pairs.  The 
+Eikonal equation is discretized in terms of the incremental 
+ij  for each cell pair.   
+ 
+()()2ij t pi pj ij c V V T =+  (4) 
+It is solved using  Dijkstra’s algorithm (Dijkstra 1959)  to obtain the minimum value of the diffusive time 
+of flight at each cell, 
+i , subject to the boundary condition 
+0=  on the flowing isobar boundary.  Once 
+this solution is obtained, it is characterized in terms of the cumulative pore volume, 
+()pV .  
+ 
+()()()3
+ip pixV x d x V
+
+==  
+  (5) 
+We now contrast the properties of different solutions to the diffusivity equation.   The asymptotic  (early 
+time, first passage)  pressure solution for a fixed rate drawdown  with total flux 
+fq  can be  expressed in 
+terms of a diffuse source  (Nunna, Liu a nd King 2019) .  
+ 
+()() ()2 224 44,if t tt
+t d p pi
+i dq pc e V t e dV V et V t − −−
+=− = =    (6) 
+The diffuse source is expressed using  the drainage volume, 
+()dVt , which is a convolution of the 
+cumulative pore volume with the diffusion kernel, 
+24te− , over the domain 
+ .  A pressure solution for 
+Eq.  (3) is obtained over the connected sub -volume for which 
+  is finite subject to the boundary  
+condition 
+0fp= .  Flow capacity is quantified in terms of the face (or half-cell) transmissibility, 
+fT .   
+ 
+84th EAGE Annual Conference & Exhibition  
+ 
+1,f f fT p q p p p=  = −  (7) 
+Here, the pressure 
+p  is a transmissibility weighted average of the flowing pressure over the upstream 
+faces in the connected sub -volume.   In this solution, time is a parameter that needs to be specified , and 
+there is no reference to the initial pressure.   
+The pressure solution may also be obtained directly from the diffusivity equation, Eq.  (3).  Now use is 
+made of the initial condition, 
+0initp=  while a pressure is obar of 
+1fp=−  is used to close the equations 
+and determine the flux.  Again, the flow capacity is characterized in terms of the face transmissibility, 
+and again the time step size for the discretization remains to be specified.   
+To specify the time for each of these calculations we utilize additional co ncepts from the asymptotic 
+pressure solution , Eq.  (6), following the earlier reference s.  At a given time, the Limit of Detectability 
+(LOD) is given by 
+244LOD t= .  For 
+LOD  the exponential term in Eq.  (6) is negligible and the 
+solution remains close to the initial pressure.  In contrast, the Pseudo Steady State ( PSS) limit is given 
+by 
+24 0. 01PSS t= .  For 
+PSS  the exponential term in Eq.  (6) is close to unity and the solution is 
+locally PSS.  The location of the so-called stabilized zone lies within the transient region, 
+PSS SZ LOD  
+.  It is defined by extending the PSS region to match the transient drainage volume 
+()()p SZ dV V t=
+.  For flow simulation purposes we need to characterize the transmissibility at a time 
+for which the well -connected sub -volume of the upscaling region reaches PSS.  The extent of this 
+volume is obtained from the median value for 
+  based on the connected cumulative pore volume 
+(summed over finite 
+i ), with the boundary location specified at twice the median value.   
+ 
+()1,22i Finite
+p median pi BND median
+iVV
+  = =   (8) 
+ 
+2225 100PSS BND mediant==  (9) 
+With this choice of time, the transmissibility is independent of 
+  and 
+tc .  Pressure averaging of the 
+solution for the transmissibility, Eq.  (7), is performed on the furthest upstream extent of the volume 
+defined by 
+BND .  Dimensionless time 
+D PSSt t t=  and dimension less diffusive time of flight 
+D median  =
+ will be utilized when presenting results.   
+ 
+Example Results  
+ 
+The above methodology has been used to calculate the upscaled face transmissibilities for  the 
+60 220  
+cells of layer 55 of the SPE10 reference model (Christie and Blunt 2001) .  
+10 10  upscaling is 
+performed providing 132 calculations that may be compared in each of the four face directions, two of 
+which 
+()J  are shown in  Figure 1.  Steady State (SS) upscaling is used as a reference calculation, in 
+which the isobar pressures are specified on two opposite faces and 
+p  is defined as the pore volume 
+weighted average of the pressure, here restricted to cells with finite 
+ .  In addition to the PT and DS 
+methods already discussed, the comparisons also include PSS 
+() t→ , LOD (PSS up to 
+LOD ), SZ 
+(PSS up to 
+SZ ), and BND (PSS up to 
+BND ).  These results are consistent with previous conclusions:  
+• Steady state upscaling is biased towards lower transmissibility compared to DS.   
+• PSS upscaling is even more strongly biased towards lower transmissibility values.   
+ 
+Let us examine one 
+10 10  upscaling region to get a better sense of the underlying mechanisms.  This 
+region has been selected as it provides a good demonstration of the differences between the different 
+calculations.   
+Permeability and porosity and the directional diffusive time of flight (±J directions) are shown in Figure 
+2.  Cumulative pore volume and the transient  drainage volume are in Figure 3.  The source term strength   
+ 
+84th EAGE Annual Conference & Exhibition  
+ 
+  
+  
+  
+ 
+Figure 1 Comparison of ±J face  transmissibility, SPE 10 layer 55 (10×10 upscaling)  
+ 
+ 
+  
+  
+  
+ 
+Permeability  Porosity  DTOF , J- DTOF , J+ 
+Figure 2 Permeability , porosity , and ±J directional diffusive time of flight , in the selected region  
+ 
+ 
+  
+  
+  
+ 
+Figure 3 (a)-(d) Cumulative (left) and transient (right) pore volumes in the J - and J+ direction s 
+ 
+ 
+  
+  
+  
+ 
+Figure 4 (a)-(d) Comparison of the PT and DS source terms in the J - direction (left) and J+ direction 
+(right), with additional 2D comparison for the J+ direction  
+ 
+(normalized to the total flux) of the PT and DS methods are in Figure 4.  Figure 2 shows that this 
+upscaling  region  overlaps a change in facies within the SPE10 geologic description with permeability 
+contrasts of more than  four orders of magnitude.  The high permeability sub -volume is well connected 
+to the I - and J+ faces but does not extend across the selected u pscaling region.  The diffusive time of 
+flight provides a characterization of the pressure depletion from each face, here shown for J - and J+.  
+Contours of DTOF show the propagation of the depletion starting from the 
+0= , connecting to  the 
+higher permeability cells, and then moving into the lower permeabilities.  The cumulative and transient 
+pore volumes in Figure 3 show the impact of the differing spatial patterns, with the J - direction showing 
+good transient connectivity within the upscaling region.  In contrast, the depletion geometry of Figure 
+3(b) and Figure 3(d) show more limited connectivity .  Detailed comparison of the pressure solutions is 
+provided in Figure 4.  Figure 4(a) compares the source terms (normalized to the total flux) for the PT 
+and DS solutions.  Both methods show that almost the  entire  model reaches PSS, except for  a few cells 
+with zero pore volume.  In contrast , Figure 4(b)-(d) show consistent deviations.  Both methods agree for 
+the zero (isolated) and strong (PSS) source term cells, but they differ for those c ells in the transition 
+region.  Physically, the asymptotic diffuse source solution is a purely refractive first passage 
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+approximation to pressure depletion that neglects pressure reflections (Rawlinson and Sambridge 2004) .  
+Although the transient times associated with the solutions are correct, the long -time amplitudes may be 
+incorrect , as seen  in Figure 4(b)-(d), where the DS solution over -estimates the source strength in the 
+less well -connected regions.   
+ 
+Conclusions  
+ 
+Several models of depletion were compared,  and flow characterization was obtained for high contrast 
+geologic model (SPE10) upscaling .  Diffuse source  upscaling w as found to be consistent with a new 
+pressure transient upscaling calculation in many of the ups caling regions but may over -estimate the 
+pressure depletion in less well -connected regions.  The new PT upscaling approach makes fewer 
+approximations than the DS calculation and is expected to provide improved upscaling  accuracy .  
+ 
+Acknowledgments  
+ 
+The autho rs would like to acknowledge the continuing support of the members of the MCERI joint 
+industry project at Texas A&M University.   
+ 
+References  
+ 
+Christie, M.  A.  and Blunt, M.  J.  [2001] Tenth SPE Comparative Solution Project: A Comparison of 
+Upscaling Techniques.  SPE Reservoir Evaluation & Engineering 4(04), 308 -317.  
+ 
+Dijkstra, E.  W.  [1959] A note on two problems in connexion with graphs.  Numerische Mathematik 1, 
+269–271.  
+ 
+Liu, C.  -H. , Nunna, K.  and King, M.  J.  [2022] Application of diffuse sour ce basis functions for improved 
+near well upscaling.  Computational Geosciences 26, 823 -846.  
+ 
+Nunna, K. , Liu, C.  -H.  and King, M.  J.  [2019] Application of diffuse source functions for improved flow 
+upscaling.  Computational Geosciences.   
+ 
+Rawlinson, N.  and Sam bridge, M.  [2004] Wave front evolution in strongly heterogeneous layered 
+media using the fast marching method.  Geophysical Journal International 156(3), 631 -647.  
+ 
+Virieux, J. , Flores -Luna, C.  and Gibert, D.  [1994] Asymptotic Theory for Diffusive Electromagnetic 
+Imaging.  Geophysical Journal International 119(3), 857 -868."
+level_1/level_2/1507.pdf," 
+ 
+84th EAGE Annual Conference & Exhibition  
+Produced Water Re -Injection  (PWRI ) Compatibility Investigation s: Comparison Between 
+Geochemical Simulators and Laboratory Results  
+ 
+Introduction  
+From a technological standpoint , reservoir engineers are concerned  with injectivity impairment in water 
+injection projects .  Before conducting any water injection test, it is vital to examin e the filtration of the 
+suspended particles and oil content as well as the deposition and precipitation of inorganic scale.   Scale 
+generation is a complicated phenomenon that can result from variations in pressure, temperature, and 
+pH as well as chemical in compatibilities between the injection water and formation brine (Shabani et 
+al. , 2019) .  Each water injection project must include compatibility check due to wide range of  
+parameters and concurrent  changes in the  process .  Aside from the e xperimental methods which are 
+available to verify this compatibility check, geochemical  simulators are  recently introduced  to compute 
+the generat ed inorganic scale types and its amount s.  Theses s imulators are  working  based on the 
+assumption that fluids are  at the super -saturation  condition .  For example, a s any of the components in 
+the water phase is super -saturated, scale generation start s.  Another traditional way of compatibility 
+check is a laboratory test.  This type of investigations is design to mimic th e injection process and 
+evaluati ng scales’ generation in different stages.  In t his study laboratory results of the  static 
+compatibility check for mixing injection and formation water compared with the geochemical 
+simulators and the accuracy of the simulators  based on  lab results  are presented .  
+ 
+Method and/or Theory  
+The standard procedure for testing compatibility in a laboratory involves mixing two or three water  
+phase s with various compositions at the desired pressure and temperature and then wait until the liquid 
+reaches equi librium.   By filtration , the precipitation is separated from liquid phase  and the filtrated scales 
+are dried and weighted t o evaluate total solid generated.  Scanning Electron Microscopy (SEM) with 
+Energy Dispersive X -Ray Analysis (EDX)  are applied on the scales  to detect  the type and amount of 
+each scale .  It is worth mentioning that the accuracy of these  laboratory test s depends on an accurate 
+brine sampling at  reservoir pressure and temperature  which is very time consuming and expensive at 
+the same time.   
+Due to complexity of brine composition and liquid -liquid  interaction s, geochemical simulators  are used  
+as computational  investigators  (Jiménez et al. , 2018) .  Geochemical simulators  are both  fast and low-
+cost.  By importing desired condition  (i. e. : different brines ratio,  at desired  pressure and temperature) , 
+simulators predict the possible scale generation .  Generally, the simulators have access to  a vast database 
+of chemical reactions that can take place at reservoir or near surface  condition  and is able to make 
+predictions based on stability of equilibrium and the fluid saturation conditions of the fundamental  ions 
+(Mostafavi et al. , 2021) .  According  to these chemical reactions , geochemical simulators would predict 
+scale formation only if any ions are in supersaturation  condition, which i s necessary  but not enough .  
+Inorganic scaling phenomena have three  main steps, super saturation, nucleation, and crystal growth 
+(Kamalipour et al. , 2018) .  In this study for the very first time we use  two widely used g eochemical 
+simulators , Oli ScaleChem and PHREEQC , and compare  their results with laboratory compatibility 
+tests to examine the accuracy of the scale formation simulators .  
+ 
+Table 1 : Compositions of the candidate  injection water and the formation brine   
+Property/  
+Water 
+sample  pH HCO 3 - SO 4 2- Cl - S Fe 2+ Ca 2+ Mg 2+ Na + K + Sr 2+ TDS  
+Unit  _ mg/L  mg/L  mg/L  mg/L  ppm mg/L  mg/L  ppm ppm ppm mg/L  
+IW 5. 3 138 410 125000  - 12 11400  1900  61000  850 660 201370  
+FW 6. 5 545 320 112000  40 4 9800  1100  56000  2400  900 183100  
+ 
+  
+ 
+84th EAGE Annual Conference & Exhibition  
+Case Study  
+This article investigates the use of produced water reinjected into an oil reserve in  one of the matured 
+oil fields in  south -west of Iran .  The produced water  and formation brine  composit ions are summarized 
+in table 1.   
+The c ompatibility study  was first  carried out using  PHREEQC  and Oli ScaleChem  simulators to assess 
+the scaling potential  of the fluids  in a ratio of 25% formation water and 75% injection water .  The 
+predicted scale type and total scale amount for each simulator  are shown in Figure 1.    
+Due to different equilibrium constants in each simulator's database, results from the two geochemical 
+simulators are different in scale types or amounts .  Although they both predict Strontium Sulfate as the 
+most common scale and results Quartz, Iron Sulfide and Pyrite are completely different.    
+ 
+Figure 1  Predicted scale types and amounts in mixed waters in each geochemical  simulator.  Blue for 
+Oli ScaleChem  and orange for PHREEQC  
+On the experimental part of this study, s amples of both waters  were  filtered with 0. 45 -micron  filter 
+paper  to separate suspended solids .  Later the formation brine was mixed with the injection water i n the 
+desired ratio  (25% formatio n brine with 75% injection water ) and the mixture was left in stable  
+condition for 14 days.  This time is sufficient  for all the probable reactions to  take place .  After drying 
+the filtrated scales, atomic  identification was conducted with SEM -EDX experiment.  Total scale 
+amount was 134 mg/l and the SEM -EDX results are shown in Figure 2.    
+As the result of bulk scale SEM -EDX experiment, Oxygen, Chlorine and Iron are  detected as  
+fundamental minerals of the filtered  scales.  Sodium, Calcium and Silicon also participated in separated 
+solids.  Based on the detection  of Sodium Chloride, I ron Oxide, Iron S ulfide and/or Pyrite and Silicon 
+Oxide are confirmed.   Table 2 summarizes the scale prediction in simulators and laboratory results.   
+ 
+Table 2 : Predicted scale types  and amounts  in mix ed waters with different simulators  
+Scale (mg/l) /  
+Evaluation tool  Celestine  
+(SrSO 4) Quartz  
+(SiO 2) Pyrrhotite  
+(FeS)  Pyrite  
+(FeS 2) Calcium 
+Chloride  
+(CaCl 2) Iron 
+Oxide  
+(Fe 2O3) Sodium 
+Chloride  
+(NaCl)  Total  
+Oli ScaleChem  142 0 15 0 0 0 0 157 
+PHREEQC  164 11 0 25 0 0 0 200 
+SEM -EDX  Trace Generated  Generated  Generated  Generated  Generated  Generated  134 
+ 
+ 050100150200
+Celestine (SrSO4) Quartz (SiO2) Pyrrhotite (FeS) Pyrite (FeS2)Scale (mg/L)OLI ScaleChem PHREEQC 
+ 
+84th EAGE Annual Conference & Exhibition  
+Ions W%  A% 
+O 27. 98  45. 95  
+Na 11. 2 12. 8 
+Mg 0. 69 0. 75 
+Al 0. 44 0. 43 
+Si 5. 06 4. 73 
+S 3. 19 2. 61 
+Cl 27. 34  20. 25  
+K 0. 47 0. 32 
+Ca 7. 58 4. 96 
+Fe 14. 43  6. 79 
+Sr 1 0. 3 
+Ba 0. 63 0. 12 
+  
+Figure 2  SEM -EDX  results for bulk of the  filtered  scales   
+ 
+This experiment was repeated for certain points to analyze the scale types .  The  SEM results are shown 
+in Figure 3 and the corresponding EDX data are in table 3.  SEM -EDX analysis indicated almost pure 
+Sodium C hloride in points A and D while in points B a nd E scale are mixture of Iron Oxide, Calcium 
+Chloride and Silicon O xide.  In point C , the concentration of Oxygen, Chlorine and Magnesium  ions are 
+high.    
+Results from these investigations  show  that none of the geochemical simulators were able to accurately 
+predict some of  the mineral scales produced in the laboratory ; i. e.  Sodium Chloride, Calcium Chloride 
+and Iron Oxide.   Additionally, both simulators anticipated large concentrations of strontium Sulphide 
+scale but laboratory investigation demonstrates that this scale formation is modest .  Besides,  Silicon 
+oxide precipitation was only predicted with PHREEQC  simula tor.  The choice of which simulator to use 
+for field development in the case of full -field implementations can cause serious problems.    
+ 
+   
+Figure 3 SEM  pictures for selected points A to D  
+ 
+  
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+Table 3: Corresponding  EDX data for points A to D  
+Points/  
+Ions point A  point B  point C  point D  point E  
+W%  A% W%  A% W%  A% W%  A% W%  A% 
+O 12. 62  21. 91  35. 25  56. 71  43. 37  60. 81  12. 62  21. 91  38. 67  60. 73  
+Na 25. 95  31. 35  2. 79 3. 12 5. 31 5. 18 25. 95  31. 35  0. 87 0. 95 
+Mg 0. 64 0. 73 0. 9 0. 96 8. 95 8. 26 0. 64 0. 73 1. 4 1. 45 
+Al 0. 5 0. 52 0. 54 0. 52 0. 65 0. 54 0. 5 0. 52 0. 62 0. 58 
+Si 2. 28 2. 25 6. 94 6. 35 1. 62 1. 29 2. 28 2. 25 6. 92 6. 19 
+S 3. 18 2. 76 3. 29 2. 64 0. 54 0. 38 3. 18 2. 76 0. 74 0. 58 
+Cl 45. 24  35. 43  19. 42  14. 09  29. 5 18. 67  45. 24  35. 43  19. 25  13. 65  
+K 0. 34 0. 24 0. 73 0. 48 5. 03 2. 88 0. 34 0. 24 0. 81 0. 52 
+Ca 3. 16 2. 19 8. 93 5. 73 1. 61 0. 9 3. 16 2. 19 10. 78  6. 76 
+Fe 4. 51 2. 24 19. 42  8. 95 1. 9 0. 76 4. 51 2. 24 17. 94  8. 07 
+Sr 0. 55 0. 17 1. 03 0. 3 0. 76 0. 2 0. 55 0. 17 1. 46 0. 42 
+Ba 1. 03 0. 21 0. 77 0. 14 0. 76 0. 12 1. 03 0. 21 0. 54 0. 1 
+ 
+Conclusions  
+ 
+Due to the numerous problems after scale formation in water injection into the reservoirs, compatibility 
+tests are an inevitable step in selection of the injection fluid.  Thereafter f inding an inexpensive method 
+beside the laboratory methods is crucial.  Geochemical simulators which are lately introduced as an 
+alternative to the experimental methods are here compared to the experimental results from a real field 
+data from one of the oil  reservoirs in south west of Iran.  The comparison between the two main 
+computational simulators, PHREEQC  and OLI ScaleChem , and the results from compatibility 
+experiments  shows that both simulators consider only the super -saturation condition as the main reason 
+for the scale generation, which is not enough.  According to the experimental results, one can conclude 
+that aside from  the thermodynamic conditions, nucleation  and c rystal growth should be considered too.  
+Moreover, the total amount of scale generated in laboratory tests was 134 mg/l which was lower than 
+computed values from both simulator s but closer to OLI ScaleChem .  Last but not least,  the generated 
+scale minerals p redicted in simulators were different from laboratory results : Although both simulation 
+results show formation of a great amount of Celestine, laboratory tests do not confirm it.  Besides, 
+Sodium Chloride, Calcium Chloride and Iron Oxide which were observed  in SEM experiments, were 
+not predicted with geochemical simulators and only PHREEQC could correctly predict Silicon Oxide 
+scale generation.  In conclusion, even though laboratory compatibility checks are time consuming and 
+more expensive, their results are  more reliable.   
+ 
+References  
+ 
+Jiménez, S. , Micó, M.  M. , Arnaldos, M. , Medina, F. , & Contreras, S.  (2018).  State of the art of produced 
+water treatment.  Chemosphere , 192, 186–208.  https://doi. org/10. 1016/j. chemosphere. 2017. 10. 139  
+Kamalipour, M. , Mousavi Dehghani, S.  A. , Naseri, A. , & Abbasi, S.  (2018).  Distinguishing anhydrate 
+and gypsum scale in mixing incompa tible surface and ground waters during water injection process.  
+Iranian Journal of Chemistry and Chemical Engineering , 37(1), 231–240.  
+Mostafavi, S.  A. , Riahi, S. , Mavaddat, M. , & Bigdeli, A.  (2021).  Best Practices -design for Scale 
+Reduction During Produce d Water Reinjection (PWRI) .  1–5.  https://doi. org/10. 3997/2214 -
+4609. 202113312  
+Shabani, A. , Kalantariasl, A. , Parvazdavani, M. , & Abbasi, S.  (2019).  Geochemical and hydrodynamic 
+modeling of permeability impairment due to composite scale formation in porous m edia.  Journal of 
+Petroleum Science and Engineering , 176, 1071–1081.  https://doi. org/10. 1016/j. petrol. 2019. 01. 088"
+level_1/level_2/1506.pdf," 
+ 
+84th EAGE Annual Conference & Exhibition  
+Fracture -cavity carbonate reservoir identification  based  on adapt ive seismic inversion  
+ 
+Introduction  
+ 
+Impedance is an essential  propert y to identify ultra-deep fracture -cavity carbonate  reservoir s.  Numerous 
+seismic impedance inversi on methods are used to estimate impedance from seismic data .  However, 
+Complicated fault -karst system and low dominant frequency of real seismic data always impose a lot 
+of limitations on the ultra -deep carbona te reservoir identification  using conventional seismic inversion 
+methods.   Deep learning has progressed dramatically over the past few years.  Many achievements have 
+been made in the application of image recognition, natural  language processing, autonomous d riving, 
+and oth er fields.  The technology  has been introduced to solve the problems of conventional inversion 
+methods.   Das et al.   (2018 ) proposed a seismic impedance inversion method using 1D convolutional 
+neural networks  (CNN s).  The method can generate training datasets under rock -physics modelling  
+constraints.  Alfrarraj and AlReg ib (2019 ) used convolutional and recurrent neural network s (RNNs)  to 
+implement acoustic impedance inversion based on a semi-supervised framework.  Biswas et al.  (2019) 
+proposed p re-stack and post -stack inversion methods to predict elastic parameters based on a physics -
+guided CNN .  Mustafa et al.  (2020) proposed a joint learning scheme to estimate acoustic impedance by 
+simultaneously training two neural networks using different data sets.  Dixit et al.  (2021) estimated 
+acoustic impedance inversion using a semi -supervised CNN  with a genetic -evolutionary adaptive 
+moment optimizer .  Under the conditions of limited labels  and quality of real seismic data , there are still 
+many challenges  for the practical application of the inversion method based on deep learning.   
+ 
+In this paper,  we proposed  an adaptive seismic inversion method  to identify ultra-deep fracture -cavity 
+carbonate reservoir s.   The inversion model is based on a semi -supervised framework , which combines 
+deep 1D CNN  architecture and wave -propagation physics of classical seismic impedance inversion.  We 
+defined the adaptive objective function  to be optimized .  Seismic data and low -frequency impedance 
+data are used to generate the inp uts of the CNN -based model.   The model can be trained without any 
+real impedance labels , which can remove the limitation of insufficient label s.  The inversion model can 
+achieve better stronger learning ability  and generalization , which is more suitable for impedance 
+estimation and complicated reservoir identification.   We demonstrated the effectiveness in the 
+application of the proposed method on synthetic and real seismic data.   
+ 
+Method  
+ 
+Convolution operation of CNN s is similar to the forward waveform modelli ng that seismic traces can 
+be obtained through reflectivity series convolved with a seismic wavelet.  In this research, we modified  
+a deep 1D CNN architecture  for seismic impedance inversion .  Figure 1 shows our CNN architecture  
+based on a semi -supervised le arning framework .  The input layer can  bring seismic data and low -
+frequency impedance data into the network .  Hidden layers  contain eight  convolution layer s to extract 
+impedance features  from seismic data.  There are 32 convolution kernels in each of the first four layers, 
+and 16 kernels in each of the last four layers.   Kernel size is  generally  same as the length of  seismic  
+wavelet.  Each convolutional layer is followed by additional batch normalization and rectified linear unit 
+(ReLU) activation sequentially .  The output layer is a convolution layer  with 1 kernel to output 
+prediction .  We choose all convolution stride s to 1 and remove  pooling operations so that the dimension 
+of predicted resu lts can match that of the inputs .  In addition, the CNN architecture for inversion is 
+flexible.  The number of convolution layers can be appropriately increased or reduced according to the 
+quality and size of seismic data.   
+ 
+During training , seismic data and low-frequency impedance data are fed into the CNN -based inversion 
+model .  Features related to impedance can be extracted automatically from the seismic data through the 
+convolutional operations layer by layer in the forward propagation step.  We add up  the low-frequency 
+data and prediction  of the  output  layer as the predicted impedance.  The predicted impedance is further 
+used to calculate reflectivity and convolve a wavelet to generate corresponding synthetic seismic data.   
+The error between the real seismic data and synthetic seismic data  is calculated as s eismic waveform 
+loss.  It can be written as:   
+ 
+84th EAGE Annual Conference & Exhibition  
+ℒ𝑠=1
+𝑛∑(𝑆𝑖−𝑆𝑖′)2 𝑛
+𝑖=1                                                       (1) 
+Where 𝑆𝑖 is the real seismic data.   𝑆𝑖′ is synthetic seismic data .  ℒ𝑠 is the seismic waveform loss term .  
+Low-frequency impedance data are used to constrain the network  and improve its performance .  We use 
+low-frequency constraint loss to calculate the error between the low -frequency impedance data and 
+predicted impedance.  It can be written as: 
+ℒ𝑓=1
+𝑛∑(𝑦𝑖−𝑦𝑖′)2 𝑛
+𝑖=1                                                     (2) 
+Where  𝑦𝑖 is the input of low -frequency data, 𝑦𝑖′ is the predicted impedance.   ℒ𝑓 is the low -frequency 
+constraint loss term .  We defined  the final objective function to be optimized .  The function consists of 
+a seismic waveform loss term and a low -frequency constraint loss term .  It can be written as:  
+                                                                      ℒ=𝜆ℒ𝑠+(1−𝜆)ℒ𝑓                                                    (3) 
+Where ℒ denotes the objective function to be  optimized.   λ and 1 -λ are the weight factors of the two loss 
+terms respectively .  However, the weight  factors  have a great influence on the performance of the CNN -
+baed model.  In general, the weight  factor  λ of seismic waveform loss should be larger than the low -
+frequency constraint loss.  Although we can choose the fixed values for the weights during training, it 
+may not be suitable for all seismic traces.  In this resear ch, we add t wo fully -connected layers to connect 
+the last convolution layer.  They are used to adaptively learn the weight  factors  for each seismic trace 
+during training.  There are 16 units in the first fully -connected layer, and 1 unit in the second layer.   the 
+weight factor λ can be written as : 
+  𝜆=𝑘+(1−𝑘)𝑞                                                           (4) 
+Where k is a fixed value in the range of 0. 5 -1 before training.  q is a dynamic scale  factor in the range 
+of 0-1 from the last fully -connected layer.  λ will be change d dynamically during training , which can 
+improve the performance of the CNN -based model.  Gradients of the objective function are calculated 
+and optimize d to update  the weights  and biases of the CNN  architecture in the back -propagation step.   
+ 
+ 
+Figure 1  The proposed CNN -based architecture  and workflow  for seismic impedance inversion.   
+ 
+Application  
+ 
+The performance of our proposed method is first evaluated on a  synthetic seismic  data.  We collected 
+an small impedance volume from a seismic survey in the Tarim Basin, China .  Ultra-deep fractured -
+cavity carbonate reservoirs are our exploration targets.  The impedance volume  was estimated by using 
+a conventional deterministic inversion method  to identify the reservoirs .  It contains 5710 traces with 10 
+inline and 571 crossline.  We used the impedance data to calculate reflectivity, and further convolve a 
+Ricker wavelet to  generate a  synthetic seismic data.  The dominant frequency of the wav elet is 30Hz.  
+The impedance data was low -pass filtered to obtain the low -frequency impedance data within 8Hz.  We 
+predefined  the k to 0. 7 to calculate the weight  factors  of loss terms before training.  10% of the synthetic 
+data and low -frequency data were se lected randomly as training datasets to train the network.  Adam 
+(Kingma and Ba, 2014) was used to optimize the network during training.  The CNN inversion model 
+was trained 300 epochs with a batch size of 32 and a learning rate of 0. 001.  Finally, we used th e trained 
+model to perform impedance inversion on all synthetic data.  Figure 2b and Figure 2d show the 
+comparison of the true impedance and predicted results on the Inline 1.  It is obvious that the impedance 
+      = (        𝑞       )    1= (𝑆       𝑆       )        ' = (               
+       )
+        𝑞𝑆      
+     
+xy
+ka1[1]
+a2[1]
+a3[1]
+a4[1]
+a5[1]
+an[1]…a1[2]
+a2[2]
+a3[2]
+a4[2]
+a5[2]
+an[2]…a1[M]
+a2[M]
+a3[M]
+a4[M]
+a5[M]
+an[M]…Input layer Hidden Layers Output layer
++
+…
+a1[3]
+a2[3]
+a3[3]
+a4[3]
+a5[3]
+an[3]……
+…
+…
+…
+…
+…
+…
+Conv1 Conv2 Conv3 ConvM
+Fully -connected layers 
+…p1
+p2
+p3
+p4
+p5
+pn 
+ 
+84th EAGE Annual Conference & Exhibition  
+predicted by our method is consistent with the t rue impedance.  The fractured -cavity carbonate 
+reservoirs with different scales can be characterized accurately using predicted impedance.   
+ 
+Figure 2 The Application on synthetic data.  (a) Synthetic seismic data.  (b) T rue impedance data.  (c) 
+The low -frequency data from the true impedance data  using a low -pass filter.  (d) The impedance  
+predicted using  our proposed method.   
+ 
+Figure 3 is the comparison on the CDP 320 of Inline 1.  The comparison shows  that the predicted 
+impedan ce is in good agreement with the true impedance .  The  predicted impedance can accurately 
+identify the fractured -cavity carbonate reservoirs, which indicates the good performance of the CNN -
+based inversion method .  
+ 
+Figure 3 Comparison between the true imped ance and predicted impedance by the proposed method 
+on the CDP 320 of Inline 1.   
+ 
+We also demonstrated the  proposed method on real  seismic volume  with the target of ultra-deep 
+fractured -cavity carbonate reservoirs in the Tarim Basin .  Low-frequency data was generated from 
+impedance logs  of wells and seismic horizons.  The scale of the real seismic volume is very large, so we  
+only randomly select ed 1% of the data to generate training datasets.   To compare with our proposed 
+method, w e also employed a  commonly used conventional  deterministic  inversion method to perform 
+impedance inversion.  Figure 4( a) and 4( b) show  comparison of inversion results .  Both methods can be 
+used to characterize the large -scale fractured -cavity carbonate reservoirs , but the black  arrows  and 
+circles  indicate that the CNN -based  method can provide more impedance information to identify the 
+small -scale reservoirs.  The comparison proves that our proposed method achieved  better performance.   
+ 
+Conclusions  
+ 
+In this work, we proposed an  adaptive  inversion method to estimate seismic impedance  and identify the 
+ultra-deep fractured -cavity carbonate reservoirs  in a semi-supervised framework .  The proposed method 
+provides  a practical solution to train a CNN -based inversion model wit hout measured impedance labels , 
+3. 5
+3. 83. 73. 6
+3. 5
+3. 83. 73. 60. 15
+0
+-0. 15
+100 200 300 400 500 0
+1. 8e7
+1. 2e71. 5e7Amplitude PI (m/s ·  kg/m3)
+1. 8e7
+1. 2e71. 5e7PI (m/s ·  kg/m3)
+1. 8e7
+1. 2e71. 5e7PI (m/s ·  kg/m3)
+100 200 300 400 500 0 100 200 300 400 500 0100 200 300 400 500 0Time (s) Time (s)(a) (b)
+(c) (d)
+3500 3800 3600 3700
+2. 0e7
+1. 5e7
+1. 0e7
+Time ( ms)PI (m/s ·  kg/m3)True impedance
+Predicted impedance
+Low-frequency 
+ 
+84th EAGE Annual Conference & Exhibition  
+which can remove the limitations of insufficient labels .  We defined  the inversion objective  function that 
+consist s of the seismic waveform loss term and the low-frequency constraint loss term with 
+corresponding weight  factors .  The CNN -based model can adaptively learn the d ynamic  weight factors  
+in the objective function during training , which can improve the performance of the network .  The 
+application on synthetic and real seismic data  indicates that our proposed method  can predicted  more 
+accurate impedance  to identify fracture -cavity carbonate reservoirs .  
+ 
+Figure 4 Application and comparison on a 3D real  data.  (a) The impedance  estimated by a conventional 
+inversion method.   (b) The impedance  estimated by our proposed method  
+ 
+Acknowledgements  
+ 
+This research is financially supported by the Research Program of SINOPEC Geophysical Research 
+Institute (WTY -YK-2021 -13).  
+ 
+References  
+ 
+Das，V. , A.  Pollack, U.  Wollner, and T.  Mukerji .  [2019 ] Convolutional neural network for seismic 
+impedance inversion .  Geophysics , 84, no. 6, R869 -R880.   
+ 
+Alfarraj, M.  and G.  AlRegib .  [2019 ] Semi -supervised learning for acoustic impedance inversion .  89h 
+Annual International Meeting, SEG, Expanded Abstracts .  
+ 
+Biswas, R. , M.  K.  Sen, V.  Das, and T.  Mukerji .  [2019 ] Prestack  and poststack inversion using a physics -
+guided convolutional neural network .  Interpretation , 7, no. 3, SE161 -SE174 .  
+ 
+Mustafa, A.  and G.  AlRegib .  [2020 ] Joint learning for seismic inversion: An acoustic impedance 
+estimation case study .  90th Annual Internati onal Meeting, SEG, Expanded Abstracts .  
+ 
+Anjali Dixit, Animesh Mandal, Subhajit Sanyal, and Shib S.  Ganguli .  [2021 ] A Genetic -Evolutionary 
+ADAM (G -ADAM) optimizer for semi -supervised convolutional neural network -based acoustic 
+impedance inversion .   1th International Meeting for Applied Geoscience & Energy Expanded Abstracts.   
+ 
+Kingma, D.  P. , and J.  Ba .  [2014 ] Adam: a method for stochastic optimization .  arXiv: 1412. 6980  
+0 2. 5 5. 0 0 2. 5 5. 0
+1. 9e7
+1. 7e7
+1. 5e7
+1. 3e7
+1. 1e7
+(a) (b)PI (m/s ·  kg/m3)
+02. 55. 0Crossline (km)
+Inline (km) Inline (km)"
+level_1/1500.pdf,"84th EAGE Annual Conference & Exhibition 
+Prospective Geothermal Resources in the Deccan traps terrains: Case study from Unai, 
+Tulsishyam and Savarkundla, Gujarat 
+Introduction 
+Geothermal energy is a form of renewable energy that is environment-friendly and reliable for electric 
+power generation.  As per the Geological Survey of India ’s estimation , India can generate 10 GW of 
+power from existing geothermal resources.  However, the energy resource remains in the nascent stage 
+of development with only 7. 1% share in the total renewable energy supply due to limited knowledge, 
+technology readiness, and policy framework constraints.  To achieve its objectives of energy 
+independence and net-zero carbon emission, India needs to look towards harvesting geothermal 
+energy resources through extensive geophysical exploration and exploitation in the prospective 
+locations.  
+Gujarat is an Indian state located on the western coast of the country.  Multiple exploration activities 
+previously carried out in the state suggest positive indications of geothermal systems at the top of 
+Deccan trap terrains.  With the formation at the end of the Cretaceous period 65 million years ago, The 
+Deccan trap is one of the greatest volcanic features on Earth's surface and spans more than 500,000 
+km2 in the Indian sub-continent.  The geology of Saurashtra and the southern regions of Gujarat 
+exhibit numerous such horizontal volcanic features with varying thicknesses.  In the traps, confined to 
+semi-confined conditions exist in intertrappeans and vesicular basalt units between two successive 
+layers of compact basalts, under unconfined conditions in weathered/fractured mantle at a shallower 
+depth, and under unconfined conditions in joints and fault/fracture zones within massive basalt units.  
+Groundwater can migrate vertically under in-situ hydraulic pressure through faults, fracture zones, 
+and joints connected to the constrained deeper aquifer, manifesting itself as springs on the surface 
+(Kumar et al. , 2011).  
+Figure 1  location of Tulsishyam, Savarkudla, Unai and Deccan traps in the map of Gujarat, India  
+The present study pertains to three such geothermal hotspots in the state of Gujarat (Figure 1) that are 
+located at the Deccan trap dominated subsurface geology.  These areas include Unai a village in the 
+hilly terrains of southern Gujarat, Tulsishyam, and Savarkundla in the Saurashtra region of the state.  
+The average temperature of hot spring in Unai goes up to 70   and nearly 40   at Tulsishyam and 
+Savarkundla.  An extensive geophysical exploration carried out including 2D- 3D Magneto-telluric, 
+Gravity, and Magnetic survey were conducted to delineate the shallow and deep conductivity in the 
+subsurface of Unai.  The outcomes suggest a large geothermal aquifer system with a heat source, heat 
+flow path, and a trapping system (Sircar et al. , 2017).   Later on, a parametric well was drilled at the 
+prospective locations which produce water with a temperature above 60   and a 4 lit/sec flow rate.  
+An extensive Gravity and Magnetic survey carried out at Tulsishyam and Savarkundla shows a 
+84th EAGE Annual Conference & Exhibition 
+peaked gravity (mGal) and magnetic susceptibility (nT) anomaly as shown in Figure 2 (a), (b), (c), 
+and (d).  The investigated contrast in gravity and magnetic field intensity values at the surveyed areas 
+implies a high possibility of them being a geothermal water aquifer with an active heat source.  For the 
+calculation of heat in the subsurface of the hot springs stochastic thermal heat calculation method is 
+applied.  This method refers to the estimation of heat stored in the rock and the fluid which can be 
+extracted by using factors like reservoir temperature, base reservoir temperature, and specified 
+reservoir volume.  All outcomes for aquifer volume, porosity, water saturation, etc.  are derived using 
+the Monte Carlo method using a cumulative distribution function for the total heat in place.  The study 
+attempts to assess the geothermal hotspots with a probabilistic approach that differentiates the total 
+thermal energy stored in the form of minimum (P90), High likely (P50), and Maximum (P10) as 
+mentioned in PRMS (Petroleum Resource Management System) guidelines.  These prospective 
+geothermal hotspots can be a tremendous source of power generation from the heat of the earth which 
+will be environmentally sustainable and economic.  
+Method 
+Gravity Survey 
+A direct geophysical investigation tool called gravity includes estimating the acceleration brought on 
+by the Earth's gravitational pull.  In the underlying rocks, lateral density changes are what create 
+gravity fluctuations.  The tools used in gravity surveys to determine changes in gravity are called 
+gravimeters.  The unit of gravity measurement is mGal, where 1 Gal equals 1cm/s2.  The gravity 
+fluctuations brought on the sediments and basement are shown by the Bouguer gravity measurements 
+gathered across a certain grid.  The survey looks for abnormalities in density that stand out from the 
+surrounding population.  After making the necessary modifications, the Bouguer gravity is split into 
+regional and residual components.  Residual gravity can be used to explain geophysical anomalies and 
+short wavelength features.  
+In gravity surveys, gravimeters are used to measure both absolute and relative gravity at certain 
+station locations.  The two types of gravimeters are absolute and relative gravimeters.  The direction of 
+the falling mass is measured by the absolute gravimeter, which employs a laser beam to calculate the 
+precise value of gravity.  The second type of gravimeter measures the comparative gravity (mGal) 
+fluctuations between two station sites, while the absolute type gravimeter achieves a precession of 
+0. 001 mGal.  This mechanism uses a mass at the end of the spring that extends towards the higher G 
+region.  This type of gravimeter determines gravity with a 0. 01mGal precision in around 5-7 minutes.  
+In order to identify possible geothermal discovery sites, this technique is usually utilised to find dens e 
+or less dense subsurface abnormalities.  The boundaries of subsurface fault lines can also be found by 
+using the gravity concept.  These faults are perfect drilling locations since their density is substantially 
+lower than that of the nearby features.  Groundwater level fluctuations can be estimated and identified 
+using gravity surveys.  
+Magnetic Survey 
+Finding and describing areas of the Earth's crust and core with abnormal magnetizations is the 
+magnetic survey's main goal.  Because of their high sensitivity to the susceptibility of subsurface 
+geology, magnetic methods of exploration are perfect for investigating the intricate basement.  
+Although volcanic formations beneath the sediments respond primarily, the susceptibility of 
+sedimentary rocks is relatively modest.  Together with the voids, near-surface fault, igneous dykes, 
+and other underground ferromagnetic materials, this non-harmful technique is utilised for engineering 
+as well as environmental investigations.  Together with structural and stratigraphic features, magnetic 
+surveys can be used to map geological boundaries that exhibit magnetic contrast.  The two main types 84th EAGE Annual Conference & Exhibition 
+of rock magnetization are induced magnetization (abbreviated ""Mi""), where the formation follows the 
+direction of the ambient earth's magnetic field, and permanent magnetization (abbreviated ""Mp""), 
+which primarily occurs in igneous rocks and is dependent on those rocks' properties and formation 
+histories.  The unit of measurement for magnetic field strength is the nano Tesla (nT), where 1 nT 
+equals 1 kg/AS2.  The shift in magnetization results in a local or regional disruption in the magnetic 
+anomaly.  The anomalous body's position, qualities, shape, and formation history all affect how the 
+exploration field is magnetised.  
+Magnetotelluric Survey 
+The magnetotelluric survey is a passive electromagnetic technique that detects differences in electrical 
+conductivity across subterranean strata that are brought on by conductive substances such metals, 
+minerals, molten rocks, graphite, aqueous fluids, and conductive minerals (Chaves and Jones, 2012; 
+Munoz, 2014).  It gauges the erratic changes in the Earth's surface's inherent magnetic and electrical 
+fields in an orthogonal direction (Chaves and Jones, 2012).  The time variation is monitored along the 
+induced electric field as well as the magnetic field  in the magnetotelluric survey.  
+The study examines how the induced magnetic and electric fields change over time.  MT data is often 
+captured at frequencies between 10 kHz to 0. 001 kHz, or even as low as 0. 0001 Hz (Vozoff, 1991).  
+The results of the magnetotelluric survey reveal resistivity anomalies that are connected to the 
+presence of cap rock, faults, geothermal structure, and knowledge of the thermal gradient at various 
+depths (Everett and Hyndman, 1967).  Geological materials typically have low conductivity and poor 
+electrical conductivity.  
+Examples
+Figure 2 (a) Residual gravity field intensity(mGal) map of Tulsishyam (b) Residual gravity field 
+intensity(mGal) map of Savarkundla (c) Magnetic Susceptibility field intensity(nT) map of Tulsishyam 
+(d) Magnetic Susceptibility field intensity(nT) map of Savarkundla (e) Residual gravity field
+(d) 
+(g) 84th EAGE Annual Conference & Exhibition 
+intensity(mGal) map of Unai (Sircar et al. , 2017) (f) resistivity distribution at the depth of 3. 5 km bsl 
+(g) resistivity distribution at the depth of 15 km bsl  (Sircar et al. , 2017)
+Conclusion 
+After the end of the reconnaissance survey, a regional and residual gravity separation was done 
+graphically and for each three locations a contour map showing residual gravity field intensity in 
+mGal was prepared as shown in Figure 2 (a), (b) and (e).  Residual gravity curve shows variation in 
+anomalies ranging from 0. 003- 0. 0201 (mGal).  The curve suggests the presence of gravity high which 
+is also geologically supported by magnetic susceptibility anomaly map shown in Figure 2 (c) and (d).  
+This high gravity four way closure can be a possible geothermal zone which is existing in the central 
+part of the map.  
+Resistivity distribution map at the depth of 3. 5 km bsl for Unai is shown in Figure 2(f).  The 
+demarcated zone with black boundary shows most likely location of hot spots with low resistive and 
+high conductive values.  There is also presence of transform faults at some places which leads the flow 
+of hot water to the surface.  There are low-resistivity anomalies at depth 15 km below sea level as 
+shown in Figure 2(g).  This may be associated with magma which is heating of rocks lying above this 
+reservoir.  So they are the possible location of the hot spots on surface.   
+A volumetric method was utilized for estimation and assessment of the se resources.  The simulation of 
+the calculation procedure was done by the stochastic method of Monte-Carlo simulation.  According to 
+a triangular distribution, it was determined that hotspot at Tulsishyam contains 5. 157E+16 J, 
+7. 896E+16 J, and 11. 427E+16 J as the minimum (P90), highly probable (P50), and maximum (P10) 
+energy in joules.  For the similar type of distributions the values stood at 3. 630E+11 J (P90), 
+8. 824E+11 J (P50) and 1. 260E+12 J (P10) for the hotspot at Savarkundla.  Unai a place located in the 
+southern part of Gujarat holds 3. 0088E+16  J (P90), 4. 50773E+16  J (P50) and 5. 50016E+16  J (P10) of 
+energy in the form of heat.  The numbers shows that the state of Gujarat has got tremendous potential 
+to generate power from its geothermal resources.  It can be sai d that Unai and Tulsishyam look  more 
+promising in comparison of Savarkundl a for the purpose power generation  due to more storage of heat 
+in the hotspots .  The heat produced f rom these resources can be utilized in multiple direct and indirect 
+socio -economic applications.   
+References 
+Kumar, D. , Thiagarajan, S.  and Rai, S. N. , 2011.  Deciphering geothermal resources in Deccan Trap 
+region using electrical resistivity tomography technique.  Journal of the Geological Society of India, 
+78, pp. 541-548.  
+Sircar, A. , Dhale, S. , Shah, M. , Vaidya, D.  and Yaday, K. , 2017.  D and 3D Magnetotelluric Survey 
+for Geothermal Reservoir Identification.  Drilling and Exploration World (DEW) Journal, Dehradun, 
+India, pp. 61-75.  
+Chave, A. D.  and Jones, A. G.  eds. , 2012.  The magnetotelluric method: Theory and practice.  
+Cambridge University Press.  
+Munoz, G. , 2014.  Exploring for geothermal resources with electromagnetic methods.  Surveys in 
+geophysics, 35, pp. 101-122.   
+Vozoff, K. , 1991.  The magnetotelluric method.  
+Everett, J. E.  and Hyndman, R. D. , 1967.  Magneto-telluric investigations in south-western Australia.  
+Physics of the Earth and Planetary Interiors, 1(1), pp. 49-54."
+level_1/1504.pdf," 
+ 84th EAGE Annual Conference & Exhibition Joint Migration Inversion including Q effects: towards Q estimation  Introduction  Seismic waves traveling through the subsurface undergo various forms of attenuation effects.  Geometric spreading is one such effect, which is typically compensated for in some of the migration algorithms.  Reflection and transmission effects also cause changes in wavefield amplitudes due to contrasts in the medium.  Furthermore, the earth attenuation effect (quality factor) causes wave energy to diminish with distance or propagation time gradually.  While the exact mathematical description of this effect is unknown (Aki & Richards, 2002), it is known to be frequency-dependent and have exponential energy loss behaviour.  Attenuation is also associated with dispersion, leading to gradual changes in signal shape and strength.  As a result, the peak energy shifts towards lower frequencies, which can cause the signal to become wider and more distorted over time.   It is crucial to properly account for all attenuation effects from the overburden to gain high-resolution information on the sub-surface.  The Full Wavefield Migration (FWM) (Berkhout, 2014b; Davydenko and Verschuur, 2017) and Joint Migration Inversion (JMI) methods (Staal and Verschuur, 2013; Berkhout, 2014c; Verschuur et al. , 2016) use the Full Wavefield Modeling (FWMod, Berkhout, 2014a) scheme, which includes geometric spreading, reflectivity, and transmission effects and all multiple scattering by recursively and iteratively propagate wavefields up/down in the subsurface.  This modeling engine is optimized for an inversion algorithm that uses the subsurface's propagation velocity and reflectivity models based on measured seismic data.  The inversion algorithm uses a gradient descent scheme, where the difference between measured and modeled data is projected onto updates for the reflectivity and propagation velocity models (Staal, 2015).  Because of the modular set-up of the FWMod process, where propagation and reflection/transmission are described by wavefield operators, bringing in the Q-effect is relatively simple, by redefining the propagator.  Recently, there was a foirst attempt by Alasmri and Verschuur (2019), where they incorporated the impact of the Q effect into both FWM and JMI.  They assumed a constant Q-value for the seismic data, integrated the attenuation effects into the full wavefield forward modeling, and compensated for this effect during inversion.   The aim of this study is to incorporate the quality (Q) factor impact into both FWMod and Joint Migration Inversion (JMI) by assuming a function for Q based on the velocity.  In addition, we assume that each layer in the model has a distinct Q value and then, account for it during the JMI process.  We assume that a function exists that describes the connection between velocity and quality factor.  For this preliminary study we assume a deterministic function with few free parameters.  However, we envision a process where we rely on machine learning (ML) techniques to obtain the Q function based on velocity, allowing us to apply this method without prior knowledge of the Q function.   Theory of JMI including Q effects  During the process of estimating propagation operators, the forward propagation of the waveform experiences attenuation, leading to changes in both the shape and amplitude of the wavelet.  Not compensating for attenuation will cause the reflector to be affected and result in an inaccurate reflectivity estimation.  Including these effects in one-way propagators within the full wavefield modeling engine is easy.  To achieve this we follow what Alsmari and Verschuur (2019) did in their work, so consider the attenuation factor to be incorporated into a complex velocity, as shown below:   𝑣! =ω𝑘=ω𝑘""+𝑖𝛼	.   (1)  This equation involves the variables 𝑣!  which represents complex velocity, ω which represents angular frequency, and k which represents wavenumber.  𝛼 is defined via the following equation:   𝛼=πf𝑄𝑣=ω2Q𝑣	, (2)  
+ 84th EAGE Annual Conference & Exhibition where 𝑄and 𝑣 are the quality factor and the original velocity, respectively.  Equation 1 then becomes: 𝑣! =𝑣#$%! ""#&#$'$(""#)""&=	𝑣01+()*2%$.                                                    (3) Equation 3 combines velocity and quality factor to model wave propagation that considers anelastic attenuation effects (Toksoz and Johnston, 1981; Sheriff and Geldart, 1995; Aki and Richards, 2002).   The JMI process is a data-fitting process, where the objective function is defined as the energy in the data-residual, i. e.  the difference of the measured and the modeled seismic records.  The inversion parameters are the (migration) propagation velocity model and the seismic reflectivity model.  With these two parameters the so-called FWMod scheme (Berkhout, 2014a) can be carried out to regenerate the seismic data from the imaging paramaters.  The FWMod employs one-way propagators, usually based on the phase shift operators, e. g.  via the phase-shift plus interpolation (PSPI) methodology (Gazdag and Sguazzero, 1984).  The involved phase shift operators in the wavenumber domain for 2D                                                     𝑊(𝑘+,𝜔)=𝑒%,-'∆/;	𝑘/=90""1""−𝑘+)  ,                                           (4) With ∆𝑧 the extrapolation distance, can be easily extended to include the complex velocity as given by equation 3.  This provides the right frequency dependent amplitude and phase effect.    During the inversion process of JMI, in each iteration, the residual will be back-propagated to each depth level to be combined with the forward modeled source field (including all multiple scattering) to achieve either an update for the reflectivity or the propagation velocity (depending on the type of imaging condition that is used after back-propagation).  The forward modeling of the source will then include the correct Q-effect.  Also, for the determination of the step length – to be applied on the velocity or reflectivity gradient – the linearized effect of the gradient is again forward modeled to be compared with the residual data, in which the Q-effect can also be properly included.  Thus, JMI will iteratively adapt model parameters such that forward modeled data, including the Q-effect, fit the measured data.    Numerical examples  We incorporated the estimation and compensation of anelastic attenuation effects to enhance JMI's ability to provide higher seismic resolution in complex areas.  We achieved that by incorporating prior knowledge of Q in FWMod and during inversion.  Even though it's not completely realistic to have a quality factor function based on the velocity, we can still assume a function exists that describes the connection between velocity and quality factor.  This assumption may have some merit because there could be a link between velocity, density, and quality factor in the real world.  One way to estimate such Q function can be through ML methods.  In our new JMI method, the Q value of each grid is updated in every iteration by the assumed Q-velocity relation, which uses the estimated velocity in that iteration as the input.  In this example, a 2D lens-shaped model with a low-velocity middle region exhibiting a strong quality factor effect (Q=25), one reflector above with Q=40, the second layers from the top have the Q value of 35, and other reflectors below with higher Q values were used.  The frequency ranges from 5 to 40 Hz.  The maximum data offset used for inversion is 3000 m, 1500 m in depth, and sources and receivers are equally distributed along the surface.  Synthetic data up to the fourth order of multiples are included.  Figure 1 and 2 show the result of the standard JMI and our new JMI method, respectively.  It is obvious that the accuracy of the estimated velocity and reflectivity is improved in our new method compared to standard JMI.  We can see clearly once we do not compensate for Q, the attenuation effects imprint on the reflectors and lower the resolution of the image.  As a consequence, the reflectors below the lens shape in figure 1 are barely reconstructed with the presence of attenuation in standard JMI.    In a first step towards estimating Q, we examine JMI’s sensitivity to changes in the assumed Q-velocity relationship during inversion (while the data remains the same).  We, therefore, tested various Q functions, as depicted in figure 3(a).  The results for one vertical cross-section of the inverted images are presented in figure 3(b-e).  Figure 3(f) shows the maximum obtained reflectivity below the anomaly,  
+ 84th EAGE Annual Conference & Exhibition showing the best results for the correct Q function.  Moving away from this optimal Q function will cause a reduction in the maximum estimated reflectivity.  This could be used as metric in  estimation.   
+ Figure 1 left: True reflectivity and true velocity of the model.  right: Estimated reflectivity and velocity model with the standard JMI (without Q compensation), while the data is modeled with Q-effects.   
+ Figure 2 Estimated reflectivity and velocity model with the Q-JMI,  Conclusions  Incorporating the attenuation in seismic imaging and velocity estimation is an important component to optimally address real seismic data.  For the JMI process this can be easily done in the forward modeling scheme, as this is built from separate propagation and scattering operators.  The propagation operator, based on laterally varying phase shift operators, can easily be modified to include the Q-effect.  With numerical examples it was first shown that JMI is able to retrieve a proper image and velocity model, incorporating the correct Q-model.  In addition, when varying the Q-model it was demonstrated that the correct Q-model provided the best (strongest) target reflectivity, while deviations in Q (either too low or too high) yield poorer reflectivity estimates.  This opens the door for automatic Q-estimation during the JMI process.   Acknowledgements  This work is carried out within the Delphi Consortium and is partly funded by the European Union’s Horizon 2020 Research and Innovation Programme under the Marie Sklodowska-Curie COFUND scheme with grant agreement No.  101034267 (ENGAGE).  
+ 
+ 84th EAGE Annual Conference & Exhibition  Figure 3 a) Q functions base on velocity.  Green curve: right Q model, red/blue curve: Q model with higher/lower effect than the desired Q model.  b-e) estimated reflectivity based on different Q functions.  f) Estimated maximum amplitude for the recovered target reflectivity values.   References Aki, K.  and Richards, P. G.  [2002] Quantitative Seismology; Theory and methods.  university Science Books.   Alasmri, H. , & Verschuur, D.  J.  ]2019].  Towards Q-compensation in full wavefield migration and joint migration inversion.  In 81st EAGE Conference and Exhibition 2019 (Vol.  2019, No.  1, pp.  1-5).  EAGE Publications BV.  Berkhout, A. J.  [2014a] Review paper: An outlook on the future of seismic imaging, part I: forward and reverse modelling.  Geophysical Prospecting, 62, 911–930.   Berkhout, A. J.  [2014b] Review paper: An outlook on the future of seismic imaging, part II: Full wavefield migration.  Geophysical Prospecting, 62, 931–949.   Berkhout, A. J.  [2014c] Review paper: An outlook on the future of seismic imaging, part III: Joint migration inversion.  Geophysical Prospecting, 62, 950–971.   Davydenko, M.  and Verschuur, D. J.  [2017] Full-wavefield migration: using surface and internal multiples in imaging.  Geophys.  Prosp. , 65, 7–21.   Gazdag, J.  and Sguazzero P.  [1984] Migration of seismic data by phase shift plus interpolation.  Geophysics, 49, 124–131.  Sheriff, R. E.  and Geldart, L. P.  [1995] Exploration Seismology.  Staal, X. R.  [2015] Combined imaging and velocity estimation by Joint Migration Inversion.  Ph. D.  thesis, Delft University of Technology.  Staal, X. R.  and Verschuur, D. J.  [2013] Joint migration inversion, imaging including all multiples with automatic velocity update.  EAGE, Eur.  Ass.  of Geosc.  and Eng. , Expanded abstracts, London, Tu– 02–16, 4pp.  Toksoz, M. N.  and Johnston, D. H.  [1981] Seismic Wave Attenuation.  Verschuur, D. J. , Staal, X. R.  and Berkhout, A. J.  [2016] Joint migration inversion: Simultaneous determination of velocity fields and depth images using all orders of scattering.  The Leading Edge, 35(12), 1037–1046."
+level_1/1505.pdf," 
+ 
+84th EAGE Annual Conference & Exhibition  
+A microfluidic study into salt  precipitation in saline aquifers induced by  continuous CO 2 
+injection  
+ 
+Introduction   
+ 
+Carbon dioxide sequestration in saline aquifers is one of the most promising methods to mitigate CO 2 
+emission due to the potential capacity of storage volume.  However, salt precipitation (particularly 
+halite) may occur during the injection of CO 2 (both in the gas phase and supercritical phase) due to 
+evaporation.  Such precipitation may blog pores reducing the porosity and permeability of reservoir 
+formations, which must be taken into account when evaluating saline aquifers for storage (Bacci et al. , 
+2011; Miri & Hellevang, 2016) .  The field evidence in the Ketzin gas storage reservoir (near Potsdam, 
+German) indicates a one -meter interval of salt accumulation during CO 2 injection, building up extra 
+injection pressure (Baumann et al. , 2014) .   
+ 
+Core -flooding experiments are normally performed with CO 2 (gas or supercritical phases) and bri ne 
+under different pressure and temperature conditions.  Such conventional methods with CT scans can 
+offer a good assessment of the petrophysical properties of rocks and quantitatively visualise salt 
+precipitation distribution (Chavez Panduro et al. , 2020) , but observations and insights into salt 
+precipitation  at the micro/nano -scale are difficult.  Microfluidics can provide extremely high -quality 
+images of single crystals under a microscope.  Limited microfluidic experiments were performed to 
+analyse salt precipitation under mimicking the CCS process (Ho & Tsai, 2020; Kim et al. , 2013; 
+Nooraiepour et al. , 2018) .  Two types of crystal patterns, bulk crystal, and polycrystalline aggregate, are 
+observed at room temperature (Ho & Tsai, 2020; Kim et al. , 2013)   
+ 
+Previous studies suggested that the salinity of the aquifer, the gas flow rate, and capillary pressure play 
+the most influential roles with respect to salt precipitation (Miri & Hellevang, 2016) .  A lack of study 
+systematically demonstrates how temperature affects salt formation.  Increasing temperature causes a 
+noticeable increase in wate r solubility in the CO 2 phase, resulting in a quicker evaporation rate.  In 
+contrast, high temperature will normally lead to a higher solubility of salt, which needs a higher 
+concentration to precipitate.  In addition, the temperature will also affect the di ffusion rate of substrates 
+and the surface tension of water to gas, leading to complex variations of many parameters.   
+ 
+The motivation of this study is to investigate the temperature effect on salt crystallization and 
+distribution in porous media during dr y CO 2 (gas phase) injection into saline aquifers.  Potential 
+hypotheses include,  
+ 
+1) a higher evaporation rate at elevated temperatures may lead to a faster salt precipitation rate 
+and more small polycrystalline aggregates rather than large single crystals.   
+2) salt precipitation may mainly distribute in the locations, where the residual water stays during 
+gas injection and the front interface between water and the gas.   
+ 
+Valuable insights into the mechanisms of CO 2 injection -induced salt precipitation in saline aquifers 
+may help assess preferable temperatures (shallow or deeper formations) for storage sites containing 
+similar fluid salinity to mitigate the problem of precipitation.    
+ 
+Since this is an ongoing study, we only present some preliminary results on CO 2 injection at room 
+temperature and discuss potential effects  and mechanisms.  Particularly, we use a microfluidic chip 
+containing real -rock structures, which is more reliable to represent the fluid flow in real rocks.   
+ 
+Sample and experimental methods  
+ 
+- Sampl e  
+A microfluidic chip (i. e. , Enhanced oil recovery chips from Micronit) mimicking the porous rock 
+structures  is used for the experiments , as shown in Figure 1.  The chip contains an inlet and an outlet 
+hole for fluid flow, where a rock -structured pattern with a dimension of 10 mm x 20 mm is fabricated  
+ 
+84th EAGE Annual Conference & Exhibition  
+in between.  The thickness of the flow pattern is only 0. 02 mm.  The initial gas permeability of the chip 
+was measur ed with CO2 under constant flow condition s, showing a significant ly high value of about 
+2215 mD.   
+ 
+- Fluid  
+250 g/L NaCl solution was prepared for the experiments.  Such salinity is similar to the formation fluid 
+in Ketzin CO 2 storage reservoirs (Na -Cl 220g/L ) (Baumann et al. , 201 4) and in a geothermal reservoir 
+in Groß Schönebeck, Northern Berlin (Na –Ca–Cl type fluids containing 265 g/L) (Milsch et al. , 2013) , 
+which may represent the real sa line fluid in the subsurface.  The solution was degassed by vacuum and 
+stored in a Duran glass bottle.   
+ 
+- Experimental setup  
+The experimental setup is illustrated in Figure 1 , where t he microfluidi c chip is placed in a chip holder 
+(incubator) that can be heated up to 150 °C.  The whole assembly is mounted under an  inverted 
+microscope.  The chip is connected to two syringe pumps, including a fluid pump for the initial 
+saturation and drainage of the chip during gas flow, and a gas pump connected to a CO 2 compressed 
+bottle to ensure sufficient CO 2 volume on the upstream gas flow side.  In ad dition, a vacuum pump is 
+connected inline for the initial saturat ion of the chip and removing the air in the capillaries before 
+injecting CO 2.   
+ 
+- Experimental procedures  
+The experimental procedure can be summarized and listed below,  
+a) Fluid preparation and d egassing  
+b) Saturation of the microfluidic chip  
+c) The v acuum of the whole flow -through system  
+d) System pressurization to about 2. 5 bar using pure CO 2 
+e) Drainage by injecting CO 2 gas with a constant flow rate of about 1 ml /min from the gas syringe 
+pump to the fluid syringe pump ( Figure 1 ), where the drainage is mainly controlled by fluid 
+withdrawal with the fluid pump.   
+f) Time -lapse  imaging, where representative  locations are imaged with a time interval of 30 s.   
+The same microfluidic chip will be reused for all experiments  to ensure identical flow patterns .  
+Deionized water will be injected into the chip continuously to fully dissolve and remove the salt 
+precipitation after each experiment.   
+ 
+ 
+ 
+Figure 1  Schematic sketch of the experimental setup (not to scale) .  
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+Preliminary results  and discussion  
+ 
+Salt precipitation in pores at the final stage demonstrates two crucial salt forms, including large crystals 
+and polycrystalline aggre gates (Figure 2), which are similar to the previous findings (Ho & Tsai, 2020; 
+Kim et al. , 2013) .  In addition, the aggregates contain multi -layers and intra -pores.   
+ 
+ 
+Figure 2 Salt precipita tion in pores at the final stage w hen the chip is completely dry, where large salt 
+crystals and polycrystalline aggregates are founded (the zoomed -in image).   
+ 
+ 
+Figure 3 Sequential i mages of salt precipitation in pores during continuous CO 2 injection into the chip, 
+where the yellow arrow indicates t he gas flow direction.   a) initial water -gas distribution and  interface, 
+b) small crystalline initiation, c) large crystal growth within the water phase, d) late state of salt 
+precipitation, e) water film migration bridging the adjacent grains, f) final stage of salt precipitation 
+containing large crystals and polycrystalline aggregates .   
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+ 
+Furthermore, based on the sequential images in Figure 3, we found that large crystals grow within the 
+fluid (Fig.  3c and d) , but the front of the polycrystalline aggregates can grow (expand) beyond the fluid 
+interface.  Particularly, water can migrate into the polycrystalline aggregates and intensify the density 
+of the small c rystals  (Fig.  3e and f) .  The driving force of water diffusion might be the concentration 
+gradient or the difference in evaporation rate at different sites .  Additionally, salt precipitation mainly 
+distributes at the pore throats, which may have a sign ificant effect on permeability, which is un der 
+current investigation.   
+ 
+Conclusions  
+ 
+This study demonstrates salt precipitation in “real -rock pores” during CO 2 injection into saline -saturated 
+porous media.  Large crystals and polycrystalline aggregates are found, where the former occurs within 
+the fluid phase and the latter can grow beyond the water -gas interface.  The kinetics of salt precipitation  
+needs to be studied further t o gain a better understanding of the potential effects on reservoir 
+performance.  Our ongoing study will investigate permeability and porosity changes during the injection, 
+and how temperature may potentially affect the process.  Elucidation of such questions  will help to better 
+manage geological CO 2 sequestration and minimize risks of formation impairment.   
+ 
+Acknowledgements  
+ 
+The authors wish to express their gratitude to Martin von Dollen (KIT -AGW) and Kevin Altinger (KIT -
+AGW) for their technical support and contribution to establishing the microfluidic setup.   
+ 
+Reference  
+ 
+Bacci, G. , Korre, A. , & Durucan, S.   [2011] Experimental investigation into salt precipitation during 
+CO2 injection in saline aquifers.  Energy Procedia, 4, 4450 -4456.   
+Baumann, G. , Henninges, J. , & De Lucia, M.  [2014] Monitoring of saturation changes and salt 
+precipitation during CO2 injectio n using pulsed neutron -gamma logging at the Ketzin pilot site.  
+International Journal of Greenhouse Gas Control, 28, 134 -146.  
+Chavez Panduro, E.  A. , Cordonnier, B. , Gawel, K. , Børve, I. , Iyer, J. , Carroll, S.  A. , Michels, L. , 
+Rogowska, M. , McBeck, J.  A. , & Sørensen, H.  O.  [2020] Real time 3D observations of Portland 
+Cement Carbonation at CO2 storage conditions.  Environmental Science & Technology, 54(13), 8323 -
+8332.   
+Ho, T.  -H.  M. , & Tsai, P.  A.  [2020] Microfluidic salt precipitation: implications for geologica l CO 2 
+storage.  Lab on a Chip, 20(20), 3806 -3814.   
+Kim, M. , Sell, A. , & Sinton, D.  [2013] Aquifer -on-a-Chip: understanding pore -scale salt precipitation 
+dynamics during CO 2 sequestration.  Lab on a Chip, 13(13), 2508 -2518.   
+Milsch, H. , Giese, R. , Poser, M. , Kranz, S. , Feldbusch, E. , & Regenspurg, S.  [2013] Technical paper: 
+FluMo -a mobile fluid -chemical monitoring unit for geothermal plants.  Environmental Earth Sciences, 
+70(8), 3459 -3463.   
+Miri, R. , & Hellevang, H.  [2016] Salt precipitation during CO2 storage —A review.  International 
+Journal of Greenhouse Gas Control, 51, 136 -147.  
+Nooraiepour, M. , Fazeli, H. , Miri, R. , & Hellevang, H.  [2018] Effect of CO2 phase states and flow 
+rate on salt precipitation in shale caprocks —a microfluidic study.  Environmental Scienc e & 
+Technology, 52(10), 6050 -6060."
+1509.pdf," 
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+Optimising the transition from waterflood to GOGD in a fractured carbonate reservoir in 
+Sultanate of Oman  
+ 
+Introduction  
+ 
+Field X is in Northwest of Oman, at very shallow depth (crest of the field at around 100 m ss).  The field 
+consists of 17 km long and 2. 5 km wide monocline structure with several stacked carbonate reservoir 
+units.  The main reservoir is the Natih formation with Shuaiba as the secondary reservoir  [1].  Natih 
+reservoir is highly fractu red and have been intensely deformed through different structural events.  Natih 
+reservoir is sub -divided into seven units ranging from A to G.   Natih E reservoir is one of the prolific 
+reservoirs and is further divided into five sub -units: E1, E2, E3, E4a and E4b.  The reservoir accounts 
+for almost 25% of the total field Stock Tank Originally In Place (STOIIP) .  
+ 
+The structure aligned along North West (NW) – South East (SE) direction, dipping at around 16 degrees 
+to the North East (NE).  The field is bounded b y a major fault in the South West (SW) and an erosion 
+surface at the top, further sealed by thick Fiqa shale.  The crest of the field is faulted & fractured and 
+most likely enables communication across all Natih reservoirs.   
+ 
+Waterflood to GOGD Transition  
+ 
+Natih E reservoir was developed initially under natural depletion with vertical wells.  Following the 
+unsuccessful water injection trials, a full -scale Gas Oil Gravity Drainage (GOGD)  development  [2] [3] 
+using horizontal wells was implemented for the highly fractured E1/E2 reservoirs with gas injection in 
+the Natih A reservoir.   
+ 
+ 
+Figure 1: Gas oil gravity drainage (GOGD) process  [4] 
+ 
+The deeper E3/E4 reservoirs were not considered for initial GOGD deployment for their low fracture 
+density.  Waterflood development was implemented for the E3/E4 reservoirs starting 1997 using 
+horizontal wells  [4] [5] [6].  Water injection assisted in recovering back the production for the followed 
+by rapid increase in water cut reaching up to 80% in 2007.   
+  
+Following an extensive review, a new Field Development Plan (FDP) was implemented for E reservoir 
+in 2010, which propo sed for conversion of hybrid GOGD/water injection development to a full -scale 
+GOGD development across all sub -units.  The FDP proposed dedicated gas injection in the reservoir for 
+faster transition to GOGD followed by progressive reduction of water injectio n for E3/E4 reservoirs to 
+protect against oil re -imbibition.   
+ 
+New crestal gas injectors were drilled, and dedicated gas injection was initiated from 2009 onwards 
+from the crest at a depth of ~ 300 m TVDss.  Water injection in the reservoir completely stopp ed in 
+2016.  New oil producers were drilled at final rim location at a depth of 480 to 500 m TVDss to recover 
+oil through the GOGD process.  Further transitional wells (floor wells) were also added in many areas 
+ 
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+at depths ranging from 430 to 450 m TVDss to s upplement the GOGD recovery.  Many of the existing 
+oil producers were also repurposed as transitional wells and final rim wells.  The GOGD recovery 
+mechanism has helped in recovering back production from the reservoir.  Water cut in the reservoir has 
+reduced validating the successful transition from water flood to GOGD.   
+ 
+ 
+Figure 2: Plumbing diagram in GOGD process  
+ 
+Optimisation of GOGD Development  
+ 
+The transition process was conceptually challenging as studies indicated oil loss due t o re-imbibition 
+into matrix blocks.  A gradual reduction in water injection was implemented to prevent oil to re -imbibe 
+into waterflood matrix block.   
+ 
+Long horizontal final rim producers and transitional wells to draw the gas towards the final rim 
+producer s.  New seismic data and logs suggested many wells inadvertently crossed large fracture 
+corridors.  Many of these wells eventually saw gas breakthrough.  An optimisation program called for 
+identification of fracture zones and eventually redrilling these wells  as split wells to continue GOGD.   
+  
+New data also indicated aerial variability in fracture density.  Few sectors suffered from poor GOGD 
+performance.  Additional transitional wells were drilled to enhance the gas flows toward the rim wells.  
+This helped in ac celerating GOGD transition.   
+ 
+ 
+Figure 3: GOGD optimisation strategies  
+ 
+ 
+ 
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+The transition from waterflood to GOGD also left -over large volume of injected water in the reservoir 
+inhibiting gas movement towards rim wells.  The optimisation plans included reopening of the old 
+injectors as producers and drilling new set of rim lowering wells  [8] to draw out injected water as well 
+as produce incrementally from oil -water transition zone.   
+ 
+Figure 4: Rim lowering well conceptual model  
+ 
+Fracture density is higher the central area of the field resulting in smaller size matrix blocks  (SMBs) .  
+Matrix blocks in this area are small with average dimensions of 200 m x 100 m.  Previously dr illed 
+horizontal wells in this area are producing at high Gas Oil Ratio (GOR) .  In many cases, it  is challenging 
+to plan replacement horizontal wells avoiding Alpine II fractures.  As such, a vertical/slanted well 
+development is proposed to enhance recovery and reduce the gap to Top Quartile (TQ) recovery  
+ 
+It is difficult to conclude if historical production from horizonal wells effectively depleted the SMBs.  
+Hence, large uncertainty exists in remaining oil saturation in SMBs.  An appraisal plan was developed 
+to test the vertical /slanted development concept in the GOGD system and thus further enhance recovery 
+from the field.   
+ 
+ 
+Figure 5: Small matrix block opportunities  
+ 
+Further, WRFM interventions were implemented in field with operations like surface gas breakthrough 
+controllers, gas shut -off, downhole autonomous gas control valves to manage transitional wells as GOR 
+rose.   
+ 
+Results, Observations, Conclusions  
+ 
+ 
+ 
+84th EAGE Annual Conference & Exhibition  
+ 
+The transition from waterflood to GOGD over 5 years has been smooth an d a successful reversal of 
+water cut in wells in most areas have been observed.  The gradual reductio of water injection and onset 
+of gas injection has helped in minimizing oil re -imbibition as well as maintaining the reservoir ratio to 
+expectation level  
+ 
+The optimisation adjustments with active WRFM intervention, additional transitional wells, re -drilling 
+wells and rim lowering has helped in greatly enhancing the efficiency of GOGD process and reduce 
+greenhouse gas (GHG) emissions for the field.  This has ac celerated oil production and reduce gap to 
+top quartile (TQ) recovery.   
+ 
+Novel/Additive Information  
+ 
+The case study describes a successful transition of drive mechanism in a mature field.  A co -ordinated 
+WRFM strategy, data collection and action initiation h as helped to optimise the transition and achieve 
+higher recovery.  The FDP implementation serves as a template for similar transition in other fields 
+worldwide.   
+ 
+References  
+ 
+[1]  R.  H.  Tschopp, “The General Geology of Oman,” in 7th World Petroleum Congress , Mexico City, Mexico, 
+April 1967.   
+[2]  C.  E.  van Dijkum and T.  Walker, “Fractured Reservoir Simulation and Field Development, Natih Field, 
+Oman (SPE -22917 -MS),” in SPE Annual T echnical Conference and Exhibition , Dallas, USA, Oct 1991.   
+[3]  D.  Eikmans and V.  H.  Hitchings, “Using 3D integrated modelling to manage the fractured Natih Field (Oman) 
+(SPE -53227 -MS),” in Middle East Oil Show and Conference , Manama, Bahrain, Feb 1999.   
+[4]  M.  Boya Ferrero, M.  Holst, L.  Bazalgette, E.  Unal, S.  Farsi and A.  Sheheimi, “Targeting Secondary Oil Rims 
+GOGD in a Mature 50 Year Old Development in the Sultanate of Oman (SPE -188788 -MS),” in Abu Dhabi 
+International Petroleum Exhibition & Conferen ce, Abu Dhabi, UAE, Nov 2017.   
+[5]  C.  A.  Nicholls, W.  Boom, J.  Geel, S.  Al Khodori and M.  Al Lawati, “Fracture Modeling as a Key to 
+Waterflood Development of the Fahud Field Natih -E Reservoir (SPE -53211 -MS),” in Middle East Oil Show 
+and Conference , Manam , Bahrain, Feb 1999.   
+[6]  S.  Al -Khodhori, “The Challenges and Way Forward of Horizontal Dual Lateral Wells in Fahud Matrix 
+Reservoir (SPE -68204 -MS),” in SPE Middle East Oil Show , Manama, Bahrain, Mar 2001.   
+[7]  K.  Bybee, “Fracture Modeling as a Key to Water flood Development,” Journal of Petroleum Technology, 
+vol.  52, no.  01, pp.  42 -43, Jan 2000.   
+[8]  M.  K.  Choudhary, S.  S.  S.  Al Bahri, R.  S.  Al Ghatrifi, K.  Agarwal and M.  K.  Yarabi, “Development of Oil -
+Water T ransitional Zone by Rim Lowering in a Mature GOGD field in Sultanate of Oman (SPE -2113333 -
+MS),” in The Abu Dhabhi International Petroleum Exhibition & Conference , Abu Dhabi, Oct 2022.   
+[9]  C.  A.  Nicholls, W.  Boom, J.  Geel, S.  Al Khodori and M.  Al Lawati,  “Fracture Modeling as a Key to 
+Waterflood Development of the Fahud Field Natih -E Reservoir (SPE -53211 -MS),” in Middle East Oil Show 
+and Conference , Manama, Bahrain, Feb 1999."
+1514.pdf," 
+ 84th EAGE Annual Conference & Exhibition Investigation and Assessment of Technical and Economic Viability of CCUS Project in Scotian Shelf, Canada  Introduction  Carbon dioxide (CO2) sequestration is a technique to store CO2 into underground formations.  Successful CO2 storage into underground formations depends on many factors such as efficient sealing, no escaping from the storage, and minimum corrosion to injection tubing/casing.  Therefore, proper planning involving a thorough study of reaction kinetics of CO2 with the underground formation is necessary.   Trapping mechanism has lot of importance in evaluating CO2 sequestration process.  Four trapping mechanisms can be identified in CO2 sequestration, which are: structural, solubility, residual, and mineral trapping.  Structural trapping is the primary CO2 geo-storage mechanism in which the CO2 is permanently kept immobilized beneath a cap rock by a balance between buoyancy force and capillary force.  Solubility trapping involves the dissolution of CO2 into the fluids present in the formation (oil and water), which depends upon brine salinity, temperature, and pressure.  Residual gas trapping consists of storing CO2 as an immobile gas in the porous media as a result of capillary pressure where relative permeability to CO2 becomes zero.  While in mineral trapping, the CO2 is trapped as a precipitate of carbonate minerals by interaction with metal cations (predominantly Ca2+, Fe2+, and Mg2+) and is considered the most secure trapping mechanism (IPCC, 2005).   Different researchers have studied the potential of geological basins to store CO2.  Herzog (2001) assessed the potential of CO2 sequestration through giving the real example of silepner oil and gas field and concluded that capturing CO2 from power plant that produces high amount of CO2, will be able to reduce the CO2 emission.  In addition, Beecy and Kuuskraa (2001) used “Low-Carbon World” approach which envisioned significantly greater advances in energy that involves the increased use of renewables and nuclear energy resources and a “High-Carbon World” approach with less emphasis on energy efficiency, renewables, and producing hydrocarbons at same time.  They concluded that in the High-Carbon World case, sequestration needs to provide over 400 million tons of carbon emissions reduction in 2020 and over 1900 million tons of carbon per year in 2050.  Furthermore, Bradshaw and Dance (2005) conducted studies to assess the CO2 storage capacity worldwide in the earth.  They reported that the geographical and technical relationships between emission sites and storage locations as well as the economic drivers affect the degree to which geological storage of CO2 will be implemented in the future.  In addition, they reported that major petroleum provinces are the most likely place for CO2 storage to occur.   Moreover, Craig et al.  (2014) compared the use of volumetric and dynamic estimation for CO2 storage in deep saline water.  Results from their work demonstrated that using suitable method (volumetric and dynamic), storage terms (open or closed system), and duration of CO2 injection can be used to gain appropriate CO2 storage efficiency.  Based on the dynamic results, for open system condition, CO2 storage efficiency would be 0. 55% to 1. 67% as opposed to 0. 21% in a closed system.  Furthermore, another study conducted by Guo et al.  (2019) in which the influence of CO2 and nanoparticle stabilized foam injection was examined to evaluate CO2 sequestration in saline aquifers using microfluidic device saturated with brine.  It was determined that foam injection showed a substantial increment in the CO2 storage up to 40% more than gas injection.  Thus, using nanoparticle is vital in keeping the foam quality, reducing possible leaks, and maintaining a safe CO2 storage system.   In this research study, qualitative and quantitative assessment of the capacity of potential storage options of CO2 in Scotian Shelf was conducted using the volumetric and material balance methods.  The volumetric study was conducted on four deep saline aquifers using the data from geological maps, seismic, well logging and core analysis considering the storage efficiency of each of the examined aquifers.  After that, the CO2 storage capacity of six depleted gas fields was determined using the production data where analytical equations was applied.  Meanwhile, the CO2 storage capacity of other depleted and stranded fields was determined using published data available in previous work.  Finally, the risk analysis and surface facilities design were conducted, and economic evaluation was performed.   
+ 84th EAGE Annual Conference & Exhibition Geological Overview  Scotian Basin is located on the coast of Nova Scotia in Canada and extends for about 1,200 km from the Yarmouth Arch / United States border in the southwest to the Avalon Uplift on the Grand Banks of Newfoundland in the northeast.  The total basin area is 300,000 km2 including a part on the passive continental margin.  During the syn-rift phase (mid-Triassic), dominance of red beds and evaporate deposits occurred while grabens acted as loci for the clastic deposition.  Afterwards, a break-up unconformity (BU) resulted which was coinciding with the final separation of Africa and North America.  The BU resulted in a heavily graben faults and complex terranes of basement with highs along the Scotian margin which underwent a significant degree on peneplanation.  Western uplift resulted in an influx of clastic sediments along with carbonate deposition and establishment mixed energy in Laurentian Subbasin, and slightly later in the Sable Subbasin (Sable Delta complex).  Similar progradation in the southwestern region close to US-Canada border called Shelburne Delta.  These sediments originated from Gulf of St.  Lawrence region of latest Devonian to Permian sediments (Pe-Piper and Piper, 2004; Pe-Piper and MacKay, 2006).  First phase of delta progradation into those subbasins recorded by MicMac formation proved by channel distribution and delta front fluvial sands cyclically interfingering with pro-delta and shelf marine shales of the Verrill Canyon Formation.  The establishing of St.  Lawrence River in early Cretaceous led to increase the clastics in Scotian Basin and covering the carbonates of La Have and Banquereau Platforms.  Within the same period, Missisauga formation founded with mainly thick sand-rich, carbonate shoals, and shallow marine shelf successions.  Sable Delta progradation covered several subbasements and platforms, while Shelburne Delta disappeared due to the exhaustion of its river's sediment supply.  Instability of cretaceous and mid-Jurassic sediment deposition along the shelf caused subsidence and seaward-dipping development (act as trap).  As a result of that sediment loading, salt mobilized to form complex morphologies.  Shelf-edge delta complexes formed at the edges of the continental shelf along with rivers that incised exposed outer shelf sediments during low sea level periods (Cummings and Arnott, 2005; 2006).  Complex delta provided turbidity associated with other mass transport deposits to the slope, opening the path to have potential reservoirs in canyons and intra-slope mini basins during Mid-Jurassic to Cretaceous.   During late early cretaceous the shelf was covered by thick shale succession called Naskapi which is a member of the Logan Canyon caused by marine transgression.  This shale has been interbedded periodically by coarser classics (Cree and Marmora members) during Aptian-Cenomanian.  Low relief morphology allows deep marine shales and limestones to accumulate and cover the sand that deposited along coastal plain.  Scotian basin faced increase in sea level at the end of cretaceous which encourage marine marls and chalky mudstones deposits (Wyandot Formation).  Eventually these deposits buried by Banuereau formation (Tertiary mudstones & conglomerates).  Unconsolidated sediments were eroded and transported by fluvial into deep water and abyssal plain when sea level fall at the margin.  Late tertiary period, glacial and marine sediments took place for hundred meters along the outer shelf and upper slope.   Methodology  The workflow followed in this study is shown in Figure 1 where it starts with collecting data from different sources including seismic, well logging, core analysis, well data, and geological maps (structure contour, facies, and isopach).  After that, data have been analysed and reservoir characterization have been conducted.  One should note that suitable values have been assumed from previous studies for any missing parameters.  After that, a volumetric study has been performed for each formation of the saline aquifers where first geological model was built (structural framework) then shale volume and facies attributes (porosity and permeability) were determined.  Then, pore volume has been converted to storage capacity using a storage efficiency, which depends on the characteristics of each aquifer and formations, using the following equation (Halland et al. , 2013):  𝑀=𝑃𝑉×𝐸×𝜌! ""! ,                                                                                                                    (1)   
+ 84th EAGE Annual Conference & Exhibition where M is amount of CO2 in tons, PV is pore volume, E is storage efficiency, and 𝜌! ""!  is density of CO2.  Afterwards, a seal evaluation study was performed to ensure safe and secure storage of CO2 in different aquifers.  Once the seal evaluation is performed, risk analysis has been determined using Pallisade @risk simulator.   
+ Figure 1 Workflow for CO2 storage potential evaluation of Scotian Shelf.   Then, for calculating the CO2 storage potential for the depleted gas fields, the following material balance equation was used (Gammer et al. , 2011):  𝐶𝑂#	𝐶𝑎𝑝𝑎𝑐𝑖𝑡𝑦	(𝑀𝑇)=4𝐺$	×𝐵%+𝑊&×𝐵'−𝐺(×𝐵%:𝜌! ""! ,                                                 (2)  where 𝐺$ is cumulative gas production, 𝐵% is gas formation volume factor, 𝑊& is the Cumulative water production, 𝐵' is formation volume factor, 𝐺( gas injection, and 𝜌! ""!  is density of CO2.   On the other hand, for calculating the CO2 storage potential for other depleted and stranded fields, the following equation was used:  𝑀! ""#)=𝑈𝑅𝑅𝑔𝑎𝑠*)$×𝐵%×𝜌𝐶𝑂2#+,                                                                                             (3)  where 𝑀! ""#) is the mass of CO2 stored in tons,  𝑈𝑅𝑅𝑔𝑎𝑠*)$ is the ultimate recoverable reserves of gas at standard conditions data, 𝐵% is the gas formation volume factor, 𝜌𝐶𝑂2#+ is density of CO2 at reservoir conditions in ton per m3.  Furthermore, the surface facilities design and monitoring system were conducted.  Finally, the economic analysis of the whole process was performed.   Conclusions  In this research, the CO2 sequestration potential of Scotian Shelf was successfully evaluated.  Based on the findings of this study, the following conclusions can be made: • Different potential storage options were assessed i. e. , deep saline aquifers, depleted gas fields, and stranded fields in the Scotian Shelf based on the volumetric and material balance approaches.  
+ 
+ 84th EAGE Annual Conference & Exhibition • After an extensive thorough investigation, the Scotian Shelf showed a high prospective site to store around 660 Gtons of CO2.  • For the monitoring and surface facilities design for CO2 sequestration potential in Scotian Shelf, integrated and energy-efficient compression system that is powered by wind energy is recommended for this project.  • Based on the economic analysis and evaluation, an annual emission of around 12 Mtons of CO2 is produced from nearby areas near Scotian Shelf.  A profit of US$ 2 billion can be generated if the produced CO2 is captured and stored.   Acknowledgements  The team wish to acknowledge Khalifa University of Science and Technology for the support and encouragement.  Team members would also like to extend their gratitude to Dr.  Emad W.  Al-Shalabi, Khalida University, UAE for the fruitful supervision, guidance, and valuable feedback.  Many thanks to Dr.  Bill Richards, Dalhousie University, Canada for his feedback and his support to allow publishing this work.   References  Beecy, D. J.  and Kuuskraa, V. A.  [2001].  Status of US geologic carbon sequestration research and technology.  Environmental Geosciences.  8 (3), 152-159.  Bradshaw, J.  and Dance, T.  [2005].  Mapping geological storage prospectively of CO2 for the world's sedimentary basins and regional source to sink matching.  In Greenhouse Gas Control Technologies.  7, 583-591.  Craig, J. , Gorecki, C.  D. , Ayash, S.  C. , Liu, G. , & Braunberger, J.  R.  [2014].  A comparison of volumetric and dynamic storage efficiency in deep saline reservoirs: An overview of IEAGHG study IEA/CON/13/208.  Energy Procedia.  63, 5185-5191.  Cummings, D. I.  and Arnott, R. W. C.  [2005].  Growth-faulted shelf-margin deltas: a new (but old) play type, offshore Nova Scotia.  Bulletin of Canadian Petroleum Geology, 53(3), pp. 211-236.  Cummings, D. I. , Arnott, R. W. C.  and Hart, B. S.  [2006].  Tidal signatures in a shelf-margin delta.  Geology, 34(4), pp. 249-252.  Gammer, D. , Green, A. , Holloway, S.  and Smith, G.  [2011].  The Energy Technologies Institute's UK CO2 storage appraisal project (UKSAP).  SPE Offshore Europe Oil and Gas Conference and Exhibition, Society of Petroleum Engineers, Aberdeen, UK.  Guo, F. , Aryana, S.  A. , Wang, Y. , McLaughlin, J.  F. , & Coddington, K.  [2019].  Enhancement of storage capacity of CO2 in megaporous saline aquifers using nanoparticle-stabilized CO2 foam.  International Journal of Greenhouse Gas Control.  87, 134-141.  Halland, E. K. , Riis, F. , Magnus, C. , Johansen, W. T. , Tappel, I. M. , Gjeldvik, I. T. , Solbakk, T.  and Pham, V. T. H.  [2013].  CO2 Storage Atlas of the Norwegian part of the North Sea.  Energy Procedia, 37, pp. 4919-4926.  Herzog, H.  [2001].  What future for carbon capture and sequestration?  Environmental Science and Technology-Columbus.  35 (7), 148A.  Leung, D.  Y. , Caramanna, G. , & Maroto-Valer, M.  M.  [2014].  An overview of current status of carbon dioxide capture and storage technologies.  Renewable and Sustainable Energy Reviews.  39, 426-443.  Metz, B. , Davidson, O. , De Coninck, H. C. , Loos, M.  and Meyer, L.  [2005].  IPCC special report on carbon dioxide capture and storage.  Cambridge: Cambridge University Press.  Piper, D. J. , Pe-Piper, G.  and Ingram, S. C.  [2004].  Early Cretaceous sediment failure in the southwestern Sable Subbasin, offshore Nova Scotia.  AAPG bulletin, 88(7), pp. 991-1006.  Thomson, J.  R.  [2015].  High integrity systems and safety management in hazardous industries.  Butterworth-Heinemann.  Wade, J. A.  and MacLean, B. C.  [1990].  The geology of the southeastern margin of Canada."
