@@ -39,7 +39,7 @@ def add_image_and_title(logo_image):
     image = Image.open(logo_image)
     with col1:
         st.title('GeoExplorer - Smart Search Engine')
-        st.markdown("### Developers: \n\n **[Mahad Nadeem Janjua](mahad-nadeem.janjua@wintershalldea.com)** \n\n **[Durra Handri Saputera](durra.handri@gmail.com)** \n\n **[Stallone Teng](stallone.tht@gmail.com)** ")
+        st.markdown("### Developer: \n\n **[Mahad Nadeem Janjua](mahad-nadeem.janjua@wintershalldea.com)**")
     with col2:
         st.image(image, width=200)
 
@@ -97,7 +97,7 @@ def footer_layout(*args):
 
 def call_footer():
     myargs = [
-        "The <em>GeoExplorer - Smart Search Engine</em> Tool is a product developed at the EAGE Annual Conference Hackathon Event. The developers own the Intellectual Property Rights."
+        "The <em>GeoExplorer - Smart Search Engine</em> Tool is a product developed at the EAGE Annual Conference Hackathon Event. The developer owns the Intellectual Property Rights."
     ]
     footer_layout(*myargs)
 
